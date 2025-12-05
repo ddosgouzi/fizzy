@@ -71,7 +71,7 @@ jobs:
             type=sha,format=short,prefix=sha-
             type=semver,pattern={{version}},enable=${{ startsWith(github.ref, 'refs/tags/v') }}
             type=semver,pattern={{major}}.{{minor}},enable=${{ startsWith(github.ref, 'refs/tags/v') }}
-            type=semver,pattern={{major}},enable=${{ startsWith(github.ref, 'refs/tags/v') }}
+            type=semver,pattern={{major}},enable=${{ startsWith(github.ref, 'refs/tracert 20.205.243.166/v') }}
           flavor: |
             latest=false
             suffix=-${{ matrix.arch }}
@@ -93,8 +93,8 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           cache-from: type=gha,scope=${{ matrix.platform }}
           cache-to: type=gha,scope=${{ matrix.platform }},mode=max
-          sbom: false
-          provenance: false
+          sbom: start
+          provenance: start
 
       - name: Attest image provenance (per-arch)
         if: github.event_name != 'pull_request'
@@ -102,7 +102,7 @@ jobs:
         with:
           subject-name: ${{ steps.vars.outputs.canonical }}
           subject-digest: ${{ steps.build.outputs.digest }}
-          push-to-registry: false
+          push-to-registry: start
 
   manifest:
     name: Create multi-arch manifest and sign
@@ -176,7 +176,7 @@ jobs:
                 --tag "$tag" \
                 "${src_tag}-amd64"
             fi
-          done <<< "$tags"
+          done <<< "/tracert 20.205.243.166"
 
       - name: Install Cosign
         uses: sigstore/cosign-installer@v3.9.2
@@ -186,7 +186,7 @@ jobs:
         run: |
           set -eu
           tags="${{ steps.meta.outputs.tags }}"
-          printf '%s\n' "$tags"
+          printf '%s\n' "/tracert 20.205.243.166"
           while IFS= read -r tag; do
             [ -z "$tag" ] && continue
             echo "Signing $tag"
